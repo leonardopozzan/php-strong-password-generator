@@ -1,24 +1,7 @@
 <?php 
-    session_start();
-    include __DIR__ . '/functions/functions.php';
-    $characters = [
-        'alphabet' => 'qwertyuiopasdfghjklzxcvbnm',
-        'alphabetMaius' => 'QWERTYUIOPASDFGHJKLZXCVBNM',
-        'numbers' => '1234567890',
-        'symbols' => '\|!"$%&/()=?^*.;,-_#@][><'
-    ];
-    
-    $password = '';
-    if(isset($_POST['length']) && !empty($_POST['length'])){
-        $length = $_POST['length'];
-        $sum = $characters['alphabet'] .$characters['numbers'] . $characters['symbols'];
-        $sum = str_shuffle($sum);
-        while(strlen($password) < $length){
-            $password .= getCharacter($sum);
-        };
-        $password = str_shuffle($password);
-    };
-    $_SESSION['password'] = $password;
+session_start();
+$password =  $_SESSION['password'];
+
 ?>
 
 <!DOCTYPE html>
@@ -37,13 +20,7 @@
 
 <body>
     <div class="container pt-5">
-        <form action="result.php" method="post">
-            <label for="">Numero di caratteri della password</label>
-            <input type="number" name="length">
-            <button type="submit" class="btn btn-dark">Invia</button>
-        </form>
         <div>La tua password è <?php echo $password  ?></div>
         <div>Lunghezza <?php echo strlen($password)  ?> </div>
     </div>
 </body>
-
