@@ -9,21 +9,24 @@
     ];
     
     $password = '';
-    if(isset($_POST['length']) && !empty($_POST['length'])){
+    if(isset($_POST['length']) && !empty($_POST['length']) && isset($_POST['elements']) && isset($_POST['repet'])){
         $length = $_POST['length'];
-        $sum = $characters['alphabet'] .$characters['numbers'] . $characters['symbols'] . $characters['alphabetMaius'];
+        $repet = $_POST['repet'];
+        $elements = $_POST['elements'];
+        // $sum = $characters['alphabet'] .$characters['numbers'] . $characters['symbols'] . $characters['alphabetMaius'];
+        $sum = '';
+        foreach($elements as $element){
+            $password .= getCharacter($characters[$element]);
+            $sum .= $characters[$element];
+        };
         $sum = str_shuffle($sum);
         while(strlen($password) < $length){
             $password .= getCharacter($sum);
         };
         $password = str_shuffle($password);
         $_SESSION['password'] = $password;
-        header('Location: ./result.php');
+        // header('Location: ./result.php');
     };
-
-    if(isset($_POST['element'])){
-        var_dump($_POST['element']);
-    }
     
 ?>
 
@@ -50,14 +53,14 @@
             </div>
             <div>
                 <label for="">Ripetizioni</label>
-                <input type="radio" name="repet" value="repet" selected> si
+                <input type="radio" name="repet" value="repet" checked="checked"> si
                 <input type="radio" name="repet" value="no-repet"> no
             </div>
             <div>
-                <input type="checkbox" name="element[]" value="alphabet"> Lettere minuscole
-                <input type="checkbox" name="element[]" value="alphabetMaius"> Letttere maiuscole
-                <input type="checkbox" name="element[]" value="numbers"> Numeri
-                <input type="checkbox" name="element[]" value="symbols"> Simboli
+                <input type="checkbox" name="elements[]" value="alphabet"> Lettere minuscole
+                <input type="checkbox" name="elements[]" value="alphabetMaius"> Letttere maiuscole
+                <input type="checkbox" name="elements[]" value="numbers"> Numeri
+                <input type="checkbox" name="elements[]" value="symbols"> Simboli
             </div>
             <button type="submit" class="btn btn-dark">Invia</button>
         </form>
