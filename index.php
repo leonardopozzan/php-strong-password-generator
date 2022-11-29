@@ -11,14 +11,20 @@
     $password = '';
     if(isset($_POST['length']) && !empty($_POST['length'])){
         $length = $_POST['length'];
-        $sum = $characters['alphabet'] .$characters['numbers'] . $characters['symbols'];
+        $sum = $characters['alphabet'] .$characters['numbers'] . $characters['symbols'] . $characters['alphabetMaius'];
         $sum = str_shuffle($sum);
         while(strlen($password) < $length){
             $password .= getCharacter($sum);
         };
         $password = str_shuffle($password);
+        $_SESSION['password'] = $password;
+        header('Location: ./result.php');
     };
-    $_SESSION['password'] = $password;
+
+    if(isset($_POST['element'])){
+        var_dump($_POST['element']);
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -37,9 +43,22 @@
 
 <body>
     <div class="container pt-5">
-        <form action="result.php" method="post">
-            <label for="">Numero di caratteri della password</label>
-            <input type="number" name="length">
+        <form action="index.php" method="post">
+            <div>
+                <label for="">Numero di caratteri della password</label>
+                <input type="number" name="length" value="<?php isset($_POST['length']) ? $_POST['length'] : '' ?>">
+            </div>
+            <div>
+                <label for="">Ripetizioni</label>
+                <input type="radio" name="repet" value="repet" selected> si
+                <input type="radio" name="repet" value="no-repet"> no
+            </div>
+            <div>
+                <input type="checkbox" name="element[]" value="alphabet"> Lettere minuscole
+                <input type="checkbox" name="element[]" value="alphabetMaius"> Letttere maiuscole
+                <input type="checkbox" name="element[]" value="numbers"> Numeri
+                <input type="checkbox" name="element[]" value="symbols"> Simboli
+            </div>
             <button type="submit" class="btn btn-dark">Invia</button>
         </form>
         <div>La tua password è <?php echo $password  ?></div>
