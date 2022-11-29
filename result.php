@@ -23,7 +23,7 @@ $password =  $_SESSION['password'];
         <div class="box pt-5 px-3">
             <div class="text-center mb-2"><a href="index.php" class="fs-5">Genera una nuova password</a></div>
             <h2 class="text-center text-blue mb-3">Ecco la tua password sicura di <?php echo strlen($password)  ?> caratteri</h2>
-            <div class="fs-5"><?php echo $password  ?></div>v
+            <div class="fs-5"><?php echo $password  ?></div>
         </div>
     </div>
 </body>
