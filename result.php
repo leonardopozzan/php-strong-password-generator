@@ -19,8 +19,11 @@ $password =  $_SESSION['password'];
 </head>
 
 <body>
-    <div class="container pt-5">
-        <div>La tua password è <?php echo $password  ?></div>
-        <div>Lunghezza <?php echo strlen($password)  ?> </div>
+    <div class="my-container">
+        <div class="box pt-5 px-3">
+            <div class="text-center mb-2"><a href="index.php" class="fs-5">Genera una nuova password</a></div>
+            <h2 class="text-center text-blue mb-3">Ecco la tua password sicura di <?php echo strlen($password)  ?> caratteri</h2>
+            <div class="fs-5"><?php echo $password  ?></div>v
+        </div>
     </div>
 </body>

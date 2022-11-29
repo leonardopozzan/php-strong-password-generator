@@ -1,4 +1,4 @@
-<?php 
+<?php
     session_start();
     include __DIR__ . '/functions/functions.php';
     $characters = [
@@ -46,12 +46,10 @@
             //faccio un ulteriore shuffle per mischiare il risultato
             $password = str_shuffle($password);
             $_SESSION['password'] = $password;
-            // header('Location: ./result.php');
+            header('Location: ./result.php');
         }else{
             $error = true;
         }
-    }else{
-        $error = true;
     }
 ?>
 
@@ -70,26 +68,50 @@
 </head>
 
 <body>
-    <div class="container pt-5">
-        <form action="index.php" method="post">
-            <div>
-                <label for="">Numero di caratteri della password</label>
-                <input type="number" name="length" value="<?php isset($_POST['length']) ? $_POST['length'] : '' ?>">
+    <div class="my-container">
+        <div class="box">
+            <h1 class="text-center text-blue">Stron Password Generator</h1>
+            <h2 class="text-center text-light-blue">Genera una password sicura</h2>
+            <form action="index.php" method="post" class="form">
+                <div class="col-5"><label for="">Numero di caratteri della password</label></div>
+                <div class="col-3"><input required type="number" name="length" value="<?php isset($_POST['length']) ? $_POST['length'] : '' ?>"></div>
+                <div class="col-5 my-2"><label for="">Consenti ripetizioni dei caratteri</label></div>
+                <div class="col-3 my-2">
+                    <input type="radio" name="repeat" value="repeat" checked="checked">
+                    <label for="">Si</label>
+                    <input type="radio" name="repeat" value="no-repeat">
+                    <label for="">No</label>
+                </div>
+                <div class="col-5 d-flex align-items-end ">
+                    <button type="submit" class="btn btn-primary me-2">Invia</button>
+                    <button type="reset" class="btn btn-secondary">Anulla</button>
+                </div>
+                <div class="col-3 d-flex flex-column align-self-end">
+                    <div>
+                        <input type="checkbox" name="elements[]" value="alphabet" class="p-2" checked="checked">
+                        <label for="alphabet">Lettere minuscole</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="elements[]" value="alphabetMaius" checked="checked">
+                        <label for="alphabetMaius">Letttere maiuscole</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="elements[]" value="numbers" checked="checked">
+                        <label for="numbers">Numeri</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="elements[]" value="symbols" checked="checked">
+                        <label for="symbols">Simboli</label>
+                    </div>
+                </div>
+            </form>
+            <?php if(isset($error)){  ?>
+            <div class="alert alert-danger w-75 m-auto" role="alert">
+                I dati inseriti non sono corretti assicurati che la password non sia troppo corta o eccessivamente lunga <br>
+                Ti consigliamo di scegliere 15 caratteri con lettere minuscole, numeri e simboli.
             </div>
-            <div>
-                <label for="">Ripetizioni</label>
-                <input type="radio" name="repeat" value="repeat" checked="checked"> si
-                <input type="radio" name="repeat" value="no-repeat"> no
-            </div>
-            <div>
-                <input type="checkbox" name="elements[]" value="alphabet"> Lettere minuscole
-                <input type="checkbox" name="elements[]" value="alphabetMaius"> Letttere maiuscole
-                <input type="checkbox" name="elements[]" value="numbers"> Numeri
-                <input type="checkbox" name="elements[]" value="symbols"> Simboli
-            </div>
-            <button type="submit" class="btn btn-dark">Invia</button>
-        </form>
-        
+            <?php } ?>
+        </div>
     </div>
 </body>
 
