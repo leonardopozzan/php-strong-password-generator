@@ -7,27 +7,52 @@
         'numbers' => '1234567890',
         'symbols' => '\|!"$%&/()=?^*.;,-_#@][><'
     ];
-    
-    $password = '';
-    if(isset($_POST['length']) && !empty($_POST['length']) && isset($_POST['elements']) && isset($_POST['repet'])){
+    //controllo che siano settati i parametri necessari
+    if(isset($_POST['length']) && !empty($_POST['length']) && isset($_POST['elements']) && isset($_POST['repeat'])){
+        //assegno i dati alle variabili e inizializzo una password temporanea che verrà assegnata solo se si rispetteranno altre condizioni
         $length = $_POST['length'];
-        $repet = $_POST['repet'];
+        $repeat = $_POST['repeat'];
         $elements = $_POST['elements'];
-        // $sum = $characters['alphabet'] .$characters['numbers'] . $characters['symbols'] . $characters['alphabetMaius'];
         $sum = '';
+        $passwordTemp = '';
+        //ciclo l'array delle checbox che corrispondono alle chiavi del mio array characters
+        //e per ogni chiave scelta costruisco una stringa con la somma dei caratteri
         foreach($elements as $element){
-            $password .= getCharacter($characters[$element]);
+            //metto già un carattere per ogni tipo richiesto nella password per esser sicuro che sia presente
+            $passwordTemp .= getCharacter($characters[$element]);
             $sum .= $characters[$element];
         };
+        //faccio un shuffle giusto per non avere una stringa con i caratteri in sequenza
         $sum = str_shuffle($sum);
-        while(strlen($password) < $length){
-            $password .= getCharacter($sum);
-        };
-        $password = str_shuffle($password);
-        $_SESSION['password'] = $password;
-        // header('Location: ./result.php');
-    };
-    
+        //controllo che la lunghezza della password richiesta non sia inferiore al numero di tipi di caratteri richiesti
+        //es. non puoi chiedere una password di 3 caratteri selezionando tutte le checkbox
+        //allo stesso tempo controllo che se chiede che non vengano ripetuti caratteri ci siano abbastanza caratteri tra cui scegliere per generare la password
+        //senza quindi finire in loop
+        if($length >= strlen($passwordTemp)  && ($repeat == 'repeat' || $repeat == 'no-repeat' && strlen($sum) > $length)){
+            $password = $passwordTemp;
+            //ciclo while che popola la stringa password
+            while(strlen($password) < $length){
+                //faccio il controllo sul repeat
+                if($repeat == 'no-repeat'){
+                    //se non voglio ripetizioni controllo se il carattere random è presente o no
+                    $randomCharacter = getCharacter($sum);
+                    if(!str_contains($password,$randomCharacter)){
+                        $password .= $randomCharacter;
+                    }
+                }else{
+                    $password .= getCharacter($sum);
+                }
+            }
+            //faccio un ulteriore shuffle per mischiare il risultato
+            $password = str_shuffle($password);
+            $_SESSION['password'] = $password;
+            // header('Location: ./result.php');
+        }else{
+            $error = true;
+        }
+    }else{
+        $error = true;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -53,8 +78,8 @@
             </div>
             <div>
                 <label for="">Ripetizioni</label>
-                <input type="radio" name="repet" value="repet" checked="checked"> si
-                <input type="radio" name="repet" value="no-repet"> no
+                <input type="radio" name="repeat" value="repeat" checked="checked"> si
+                <input type="radio" name="repeat" value="no-repeat"> no
             </div>
             <div>
                 <input type="checkbox" name="elements[]" value="alphabet"> Lettere minuscole
@@ -64,8 +89,7 @@
             </div>
             <button type="submit" class="btn btn-dark">Invia</button>
         </form>
-        <div>La tua password è <?php echo $password  ?></div>
-        <div>Lunghezza <?php echo strlen($password)  ?> </div>
+        
     </div>
 </body>
 
